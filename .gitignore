@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+backend/.env
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Output
+*.apkg
