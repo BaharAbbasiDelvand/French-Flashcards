@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
+import { useAuth } from "./auth-context";
 import { generateCards, type Flashcard } from "./api";
 import { CardList } from "./CardList";
 
 export function NotesMode() {
+  const { getToken } = useAuth();
   const [files, setFiles] = useState<File[]>([]);
   const [bulk, setBulk] = useState(false);
   const [cards, setCards] = useState<Flashcard[]>([]);
@@ -17,7 +19,8 @@ export function NotesMode() {
     setLoading(true);
     setError(null);
     try {
-      const res = await generateCards(files, bulk);
+      const token = await getToken();
+      const res = await generateCards(files, bulk, token);
       setCards(res.cards);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");

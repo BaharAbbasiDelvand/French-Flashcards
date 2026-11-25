@@ -1,14 +1,24 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from fastapi.responses import Response
 
 from app.models import GenerateResponse, ExportRequest, EnrichRequest, Flashcard
 from app.services import ingestion, ai, anki_export
+from app.auth import require_user
 
 router = APIRouter(prefix="/api", tags=["cards"])
 
 
+@router.get("/me")
+async def me(user: dict = Depends(require_user)):
+    return {"sub": user.get("sub"), "scope": user.get("scope")}
+
+
 @router.post("/generate", response_model=GenerateResponse)
-async def generate(files: list[UploadFile] = File(...), bulk: bool = Form(False)):
+async def generate(
+    files: list[UploadFile] = File(...),
+    bulk: bool = Form(False),
+    user: dict = Depends(require_user),
+):
     blocks: list[dict] = []
     preview_text: list[str] = []
 
@@ -39,14 +49,14 @@ async def generate(files: list[UploadFile] = File(...), bulk: bool = Form(False)
 
 
 @router.post("/enrich", response_model=list[Flashcard])
-async def enrich(req: EnrichRequest):
+async def enrich(req: EnrichRequest, user: dict = Depends(require_user)):
     if not req.cards:
         raise HTTPException(400, "No cards to enrich.")
     return ai.enrich_cards(req.cards, bulk=req.bulk)
 
 
 @router.post("/export")
-async def export(req: ExportRequest):
+async def export(req: ExportRequest, user: dict = Depends(require_user)):
     if not req.cards:
         raise HTTPException(400, "No cards to export.")
     package = anki_export.build_deck(req.deck_name, req.cards)

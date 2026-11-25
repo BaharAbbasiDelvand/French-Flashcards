@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useAuth } from "./auth-context";
 import { Hub, type HubItem } from "./Hub";
 import { VocabMode } from "./VocabMode";
 import { NotesMode } from "./NotesMode";
+import { SignIn, Loading } from "./Auth";
 import "./App.css";
 
 type View = "home" | "create" | "notes" | "dictionary";
@@ -47,11 +49,25 @@ const CREATE_ITEMS: HubItem[] = [
 ];
 
 export default function App() {
+  const { enabled, isLoading, isAuthenticated, user, login, logout } = useAuth();
   const [view, setView] = useState<View>("home");
   const parent = PARENT[view];
 
+  if (enabled && isLoading) return <Loading />;
+  if (enabled && !isAuthenticated) return <SignIn onLogin={login} />;
+
   return (
     <div className="page">
+      {enabled && (
+        <div className="authbar">
+          {user?.picture && <img className="avatar" src={user.picture} alt="" />}
+          <span className="who">{user?.name ?? user?.email}</span>
+          <button className="signout" onClick={logout}>
+            Sign out
+          </button>
+        </div>
+      )}
+
       <header>
         <div className="flag" aria-hidden />
         <h1 className="brand" onClick={() => setView("home")}>

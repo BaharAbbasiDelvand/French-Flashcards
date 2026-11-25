@@ -61,6 +61,95 @@ header h1 {
   letter-spacing: -0.01em;
 }
 
+.authbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-bottom: -1.5rem;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.who {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.signout {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.signout:hover {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.signin-card {
+  max-width: 380px;
+  margin: 1rem auto 0;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow);
+}
+
+.signin-lead {
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+
+.signin-btn {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.loading {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 4rem;
+}
+
+.notice {
+  max-width: 520px;
+  margin: 1rem auto 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.notice pre {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.notice code {
+  background: var(--blue-soft);
+  color: var(--blue);
+  padding: 0.05rem 0.35rem;
+  border-radius: 5px;
+  font-size: 0.9em;
+}
+
 header p {
   color: var(--muted);
   margin-top: 0.5rem;

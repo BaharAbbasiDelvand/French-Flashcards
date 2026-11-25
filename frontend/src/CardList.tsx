@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "./auth-context";
 import { exportDeck, enrichCards, type Flashcard } from "./api";
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export function CardList({ cards, onChange, deckName, setDeckName }: Props) {
+  const { getToken } = useAuth();
   const [bulk, setBulk] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,11 +27,22 @@ export function CardList({ cards, onChange, deckName, setDeckName }: Props) {
     setEnhancing(true);
     setError(null);
     try {
-      onChange(await enrichCards(cards, bulk));
+      const token = await getToken();
+      onChange(await enrichCards(cards, bulk, token));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Enrichment failed");
     } finally {
       setEnhancing(false);
+    }
+  }
+
+  async function handleExport() {
+    setError(null);
+    try {
+      const token = await getToken();
+      await exportDeck(deckName, cards, token);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Export failed");
     }
   }
 
@@ -49,7 +62,7 @@ export function CardList({ cards, onChange, deckName, setDeckName }: Props) {
         <button className="enhance" onClick={enhance} disabled={enhancing}>
           {enhancing ? "Enhancing…" : "✨ Enhance with AI"}
         </button>
-        <button className="export" onClick={() => exportDeck(deckName, cards)}>
+        <button className="export" onClick={handleExport}>
           Export .apkg
         </button>
       </div>
