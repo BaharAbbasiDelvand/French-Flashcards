@@ -27,7 +27,7 @@ function parseLines(text: string): Flashcard[] {
 export function VocabMode() {
   const [raw, setRaw] = useState("");
   const [cards, setCards] = useState<Flashcard[]>([]);
-  const [deckName, setDeckName] = useState("French Vocabulary");
+  const [deckName, setDeckName] = useState("French Dictionary");
 
   const lineCount = raw.split("\n").filter((l) => l.trim()).length;
 
