@@ -44,17 +44,33 @@ CARD_TOOL = {
 }
 
 
-def generate_cards(content_blocks: list[dict], bulk: bool = False) -> list[Flashcard]:
-    model = settings.model_bulk if bulk else settings.model_quality
+def _run(model: str, content: list[dict] | str) -> list[Flashcard]:
     message = client.messages.create(
         model=model,
         max_tokens=4096,
         system=SYSTEM_PROMPT,
         tools=[CARD_TOOL],
         tool_choice={"type": "tool", "name": "emit_flashcards"},
-        messages=[{"role": "user", "content": content_blocks}],
+        messages=[{"role": "user", "content": content}],
     )
     for block in message.content:
         if block.type == "tool_use" and block.name == "emit_flashcards":
             return [Flashcard(**c) for c in block.input.get("cards", [])]
     return []
+
+
+def generate_cards(content_blocks: list[dict], bulk: bool = False) -> list[Flashcard]:
+    model = settings.model_bulk if bulk else settings.model_quality
+    return _run(model, content_blocks)
+
+
+def enrich_cards(cards: list[Flashcard], bulk: bool = False) -> list[Flashcard]:
+    model = settings.model_bulk if bulk else settings.model_quality
+    pairs = "\n".join(f"- {c.french} = {c.english}" for c in cards)
+    prompt = (
+        "Here is a list of French words with their English meanings. Return one flashcard "
+        "per entry, in the same order, keeping the given French and English exactly as "
+        "provided. For each, add a natural French example sentence with its English "
+        "translation, the part of speech, and the gender for nouns.\n\n" + pairs
+    )
+    return _run(model, prompt)

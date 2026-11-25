@@ -26,6 +26,16 @@ export async function generateCards(files: File[], bulk: boolean): Promise<Gener
   return res.json();
 }
 
+export async function enrichCards(cards: Flashcard[], bulk: boolean): Promise<Flashcard[]> {
+  const res = await fetch(`${BASE}/api/enrich`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cards, bulk }),
+  });
+  if (!res.ok) throw new Error((await res.text()) || "Enrich failed");
+  return res.json();
+}
+
 export async function exportDeck(deckName: string, cards: Flashcard[]): Promise<void> {
   const res = await fetch(`${BASE}/api/export`, {
     method: "POST",

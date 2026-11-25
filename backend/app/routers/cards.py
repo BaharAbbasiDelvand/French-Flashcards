@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from fastapi.responses import Response
 
-from app.models import GenerateResponse, ExportRequest
+from app.models import GenerateResponse, ExportRequest, EnrichRequest, Flashcard
 from app.services import ingestion, ai, anki_export
 
 router = APIRouter(prefix="/api", tags=["cards"])
@@ -36,6 +36,13 @@ async def generate(files: list[UploadFile] = File(...), bulk: bool = Form(False)
     blocks.append({"type": "text", "text": "Create flashcards from the notes above."})
     cards = ai.generate_cards(blocks, bulk=bulk)
     return GenerateResponse(source_text="\n\n".join(preview_text), cards=cards)
+
+
+@router.post("/enrich", response_model=list[Flashcard])
+async def enrich(req: EnrichRequest):
+    if not req.cards:
+        raise HTTPException(400, "No cards to enrich.")
+    return ai.enrich_cards(req.cards, bulk=req.bulk)
 
 
 @router.post("/export")

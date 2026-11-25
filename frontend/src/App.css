@@ -67,6 +67,130 @@ header p {
   font-size: 1.02rem;
 }
 
+.brand {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.hub {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, border-color 0.12s;
+}
+
+.feature:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.feature-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.feature-sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.feature.soon {
+  opacity: 0.6;
+  cursor: default;
+  border-style: dashed;
+}
+
+.feature.soon:hover {
+  transform: none;
+  border-color: var(--line);
+}
+
+.back {
+  background: transparent;
+  color: var(--muted);
+  padding: 0.3rem 0;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.back:hover {
+  color: var(--blue);
+}
+
+.mode-intro {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.mode-intro code {
+  background: var(--blue-soft);
+  color: var(--blue);
+  padding: 0.05rem 0.35rem;
+  border-radius: 5px;
+  font-size: 0.85em;
+}
+
+.vocab-input {
+  width: 100%;
+  min-height: 190px;
+  resize: vertical;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: inherit;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  box-shadow: var(--shadow);
+}
+
+.vocab-input:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.enhance {
+  background: var(--blue-soft);
+  color: var(--blue);
+  padding: 0.6rem 1rem;
+}
+
+.enhance:not(:disabled):hover {
+  filter: brightness(0.97);
+}
+
 .dropzone {
   background: var(--surface);
   border: 1.5px dashed var(--line);
@@ -199,7 +323,8 @@ button:disabled {
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.6rem;
   margin-bottom: 1.25rem;
 }
 

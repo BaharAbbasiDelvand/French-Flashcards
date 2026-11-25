@@ -21,3 +21,8 @@ class GenerateResponse(BaseModel):
 class ExportRequest(BaseModel):
     deck_name: str = "French from Notes"
     cards: list[Flashcard]
+
+
+class EnrichRequest(BaseModel):
+    cards: list[Flashcard]
+    bulk: bool = False
